@@ -18,6 +18,16 @@ export const SignInPage = lazy(() => import('src/pages/sign-in'));
 export const ProductsPage = lazy(() => import('src/pages/products'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 
+// Countries 
+export const CountriesPage = lazy(() => import('src/pages/countries'));
+export const AddCountryPage = lazy(() => import('src/pages/addCountries'));
+export const UpdateCountryView = lazy(() => import('src/pages/updateCountries'));
+
+// Places
+export const PlacesPage = lazy(() => import('src/pages/places'));
+export const AddPlacePage = lazy(() => import('src/pages/addPlace'));
+export const UpdatePlacePage = lazy(() => import('src/pages/updatePlace'));
+
 // ----------------------------------------------------------------------
 
 const renderFallback = (
@@ -51,6 +61,15 @@ export function Router() {
         { element: <HomePage />, index: true },
         { path: 'user', element: <UserPage /> },
         { path: 'products', element: <ProductsPage /> },
+
+        { path: 'countries', element: <CountriesPage /> },
+        { path: '/create-countries', element: <AddCountryPage /> },
+        { path: '/update-countries/:id', element: <UpdateCountryView /> },
+
+        { path: 'places', element: <PlacesPage /> },
+        { path: '/create-place', element: <AddPlacePage /> },
+        { path: '/update-place/:id', element: <UpdatePlacePage /> },
+
         { path: 'blog', element: <BlogPage /> },
       ],
     },

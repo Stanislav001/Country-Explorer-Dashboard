@@ -29,6 +29,18 @@ export const navData = [
     ),
   },
   {
+    title: 'Countries',
+    path: '/countries',
+    icon: icon('country-icon'),
+  },
+
+  {
+    title: 'Places',
+    path: '/places',
+    icon: icon('place-icon'),
+  },
+
+  {
     title: 'Blog',
     path: '/blog',
     icon: icon('ic-blog'),

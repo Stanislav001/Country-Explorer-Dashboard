@@ -19,8 +19,8 @@ import { AnalyticsCurrentSubject } from '../analytics-current-subject';
 import { AnalyticsConversionRates } from '../analytics-conversion-rates';
 
 import { useGetBookings } from 'src/hooks/useGetBookings';
-import { useGetUsers } from 'src/routes/hooks/useGetUsers';
-import { useGetCountries } from 'src/routes/hooks/useGetCountries';
+import { useGetUsers } from 'src/hooks/useGetUsers';
+import { useGetCountries } from 'src/hooks/useGetCountries';
 
 export function OverviewAnalyticsView() {
   const { currentUser, currentToken } = useAuth();

@@ -5,8 +5,6 @@ import { request } from "../helpers/request";
 
 const placeService = {
   getPlaces: async (authToken, page, limit, filters) => {
-    console.log('filters', filters);
-    
     try {
       const response = await request.get('/admin/places', {
         headers: {
@@ -32,15 +30,15 @@ const placeService = {
     try {
       const response = await request.get(`/admin/places/${id}`, {
         headers: {
-            Authorization: `Bearer ${authToken}`,
+          Authorization: `Bearer ${authToken}`,
         },
-    });
+      });
 
-    if (response.status === 200) {
+      if (response.status === 200) {
         return response.data;
-    } else {
+      } else {
         throw new Error('Something went wrong');
-    }
+      }
     } catch (error) {
       throw error;
     }
@@ -103,7 +101,7 @@ const placeService = {
           },
         }
       );
-      
+
       if (response.status === 200) {
         return response.data;
       } else {
@@ -117,14 +115,14 @@ const placeService = {
   deletePlace: async (id, authToken) => {
     try {
       const response = await request.delete('/admin/places', {
-        data: 
-        { 
+        data:
+        {
           placeId: id
         },
         headers: {
-            Authorization: `Bearer ${authToken}`,
+          Authorization: `Bearer ${authToken}`,
         },
-    });
+      });
 
       if (response.status === 200) {
         return response.data;

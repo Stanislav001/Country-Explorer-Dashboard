@@ -17,7 +17,7 @@ import { useParams } from 'react-router-dom';
 import { useRouter } from 'src/routes/hooks';
 import { useAuth } from 'src/context/auth-context';
 import userService from 'src/services/user';
-import { useGetUser } from 'src/routes/hooks/useGetUsers';
+import { useGetUser } from 'src/hooks/useGetUsers';
 
 // Define the validation schema using Yup
 const validationSchema = Yup.object().shape({

@@ -14,12 +14,12 @@ import Typography from '@mui/material/Typography';
 import { DashboardContent } from 'src/layouts/dashboard';
 
 import { useAuth } from 'src/context/auth-context';
-import { useGetPlaces } from 'src/routes/hooks/useGetPlaces';
+import { useGetPlaces } from 'src/hooks/useGetPlaces';
 import FullScreenSpinner from 'src/components/FullScreenSpinner';
 
 import { PlaceFilters } from '../place-filters';
 import { FiltersProps } from '../place-filters';
-import { useGetCountries } from 'src/routes/hooks/useGetCountries';
+import { useGetCountries } from 'src/hooks/useGetCountries';
 
 export function PlaceView() {
   const router = useRouter();
@@ -30,7 +30,7 @@ export function PlaceView() {
   const [filters, setFilters] = useState<FiltersProps>({ countries: '' });
 
   const { data: countries, isFetched: isCountriesFetched } = useGetCountries(currentToken);
-  
+
   const COUNTRIES_OPTIONS = countries?.countries?.map((country: any) => ({
     value: country.country,
     label: country.country,

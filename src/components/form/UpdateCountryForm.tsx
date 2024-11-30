@@ -13,7 +13,7 @@ import { useParams } from 'react-router-dom';
 import { useRouter } from 'src/routes/hooks';
 import { useAuth } from 'src/context/auth-context';
 import countryService from 'src/services/country';
-import { useGetCountry } from 'src/routes/hooks/useGetCountries';
+import { useGetCountry } from 'src/hooks/useGetCountries';
 
 // Define the validation schema using Yup
 const validationSchema = Yup.object().shape({

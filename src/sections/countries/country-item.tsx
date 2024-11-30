@@ -15,7 +15,7 @@ import { Iconify } from 'src/components/iconify';
 
 import countryService from 'src/services/country';
 import { useAuth } from 'src/context/auth-context';
-import { useGetCountries } from 'src/routes/hooks/useGetCountries';
+import { useGetCountries } from 'src/hooks/useGetCountries';
 
 export type CountryItemProps = {
   _id: string;

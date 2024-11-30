@@ -13,7 +13,7 @@ import { DashboardContent } from 'src/layouts/dashboard';
 import FullScreenSpinner from 'src/components/FullScreenSpinner';
 
 import { useAuth } from 'src/context/auth-context';
-import { useGetCountries } from 'src/routes/hooks/useGetCountries';
+import { useGetCountries } from 'src/hooks/useGetCountries';
 
 export function CountryView() {
   const router = useRouter();

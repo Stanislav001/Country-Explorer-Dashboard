@@ -5,7 +5,6 @@ import { request } from "../helpers/request";
 const userService = {
     getUsers: async (authToken, filters) => {
         try {
-            console.log('filters', filters);
             const queryParams = {};
 
             if (filters?.userRole !== 'all' && filters?.userRole) {

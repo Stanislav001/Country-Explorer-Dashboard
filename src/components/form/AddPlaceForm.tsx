@@ -16,7 +16,7 @@ import FormControl from '@mui/material/FormControl';
 import { useRouter } from 'src/routes/hooks';
 import { useAuth } from 'src/context/auth-context';
 import placeService from 'src/services/place';
-import { useGetCountries } from 'src/routes/hooks/useGetCountries';
+import { useGetCountries } from 'src/hooks/useGetCountries';
 
 // Define the validation schema using Yup
 const validationSchema = Yup.object().shape({

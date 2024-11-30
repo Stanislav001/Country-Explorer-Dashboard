@@ -26,7 +26,7 @@ import { emptyRows } from '../utils';
 import { UserFilters } from '../user-filters';
 import { FiltersProps } from '../user-filters';
 
-import { useGetUsers } from 'src/routes/hooks/useGetUsers';
+import { useGetUsers } from 'src/hooks/useGetUsers';
 import { useAuth } from 'src/context/auth-context';
 
 const USER_ROLE_OPTIONS = [

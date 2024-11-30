@@ -9,6 +9,7 @@ import { DashboardContent } from 'src/layouts/dashboard';
 import { useAuth } from 'src/context/auth-context';
 import { AnalyticsNews } from '../analytics-news';
 import { AnalyticsTasks } from '../analytics-tasks';
+import FullScreenSpinner from 'src/components/FullScreenSpinner';
 import { AnalyticsCurrentVisits } from '../analytics-current-visits';
 import { AnalyticsOrderTimeline } from '../analytics-order-timeline';
 import { AnalyticsWebsiteVisits } from '../analytics-website-visits';
@@ -17,10 +18,9 @@ import { AnalyticsTrafficBySite } from '../analytics-traffic-by-site';
 import { AnalyticsCurrentSubject } from '../analytics-current-subject';
 import { AnalyticsConversionRates } from '../analytics-conversion-rates';
 
+import { useGetBookings } from 'src/hooks/useGetBookings';
 import { useGetUsers } from 'src/routes/hooks/useGetUsers';
 import { useGetCountries } from 'src/routes/hooks/useGetCountries';
-import { useGetBookings } from 'src/hooks/useGetBookings';
-// ----------------------------------------------------------------------
 
 export function OverviewAnalyticsView() {
   const { currentUser, currentToken } = useAuth();
@@ -28,6 +28,10 @@ export function OverviewAnalyticsView() {
   const { data: users, isFetched: isUsersFetched } = useGetUsers(currentToken);
   const { data: countries, isFetched: isCountriesFetched } = useGetCountries(currentToken);
   const { data: bookings, isFetched: isBookingsFetched } = useGetBookings(currentToken);
+
+  if (!isUsersFetched || !isCountriesFetched || !isBookingsFetched) {
+    return <FullScreenSpinner />;
+  }
 
   return (
     <DashboardContent maxWidth="xl">

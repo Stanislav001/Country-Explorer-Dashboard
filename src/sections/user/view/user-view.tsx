@@ -14,17 +14,15 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
 import { useRouter } from 'src/routes/hooks';
-import { _users } from 'src/_mock';
 import { DashboardContent } from 'src/layouts/dashboard';
 
 import { Iconify } from 'src/components/iconify';
 import { Scrollbar } from 'src/components/scrollbar';
-
+import FullScreenSpinner from 'src/components/FullScreenSpinner';
 import { UserTableRow } from '../user-table-row';
 import { UserTableHead } from '../user-table-head';
 import { TableEmptyRows } from '../table-empty-rows';
 import { emptyRows } from '../utils';
-
 import { UserFilters } from '../user-filters';
 import { FiltersProps } from '../user-filters';
 
@@ -51,7 +49,7 @@ const defaultFilters = {
 export function UserView() {
   const table = useTable();
   const router = useRouter();
-  
+
   const [openFilter, setOpenFilter] = useState(false);
   const [filters, setFilters] = useState<FiltersProps>(defaultFilters);
 
@@ -70,7 +68,11 @@ export function UserView() {
     setFilters((prevValue) => ({ ...prevValue, ...updateState }));
     await refetchUsers();
   }, [refetchUsers]);
-  
+
+  if (!usersIsFetched) {
+    return <FullScreenSpinner />;
+  }
+
   return (
     <DashboardContent>
       <Box display="flex" alignItems="center" mb={5}>
@@ -89,21 +91,21 @@ export function UserView() {
       </Box>
 
       <Box display="flex" alignItems="center" flexWrap="wrap-reverse" justifyContent="flex-end" sx={{ mb: 5 }}>
-          <Box gap={1} display="flex" flexShrink={0} sx={{ my: 1 }}>
-            <UserFilters
-              filters={filters}
-              onSetFilters={handleSetFilters}
-              openFilter={openFilter}
-              onOpenFilter={handleOpenFilter}
-              onCloseFilter={handleCloseFilter}
-              options={{
-                userRole: USER_ROLE_OPTIONS,
-                userType: USER_TYPE_OPTIONS,
-              }}
-            />
+        <Box gap={1} display="flex" flexShrink={0} sx={{ my: 1 }}>
+          <UserFilters
+            filters={filters}
+            onSetFilters={handleSetFilters}
+            openFilter={openFilter}
+            onOpenFilter={handleOpenFilter}
+            onCloseFilter={handleCloseFilter}
+            options={{
+              userRole: USER_ROLE_OPTIONS,
+              userType: USER_TYPE_OPTIONS,
+            }}
+          />
 
-          </Box>
         </Box>
+      </Box>
 
       <Card>
         <Scrollbar>

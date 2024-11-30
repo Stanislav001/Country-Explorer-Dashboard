@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
-import { useRouter } from 'src/routes/hooks';
+import FullScreenSpinner from 'src/components/FullScreenSpinner';
 import { DashboardContent } from 'src/layouts/dashboard';
 
 import { Scrollbar } from 'src/components/scrollbar';
@@ -33,7 +33,7 @@ export function BookingView() {
   const { data: bookings, isFetched: bookingsIsFetched } = useGetBookings(currentToken);
   
   if (!bookingsIsFetched) {
-    return null;
+    return <FullScreenSpinner />;
   }
 
   return (

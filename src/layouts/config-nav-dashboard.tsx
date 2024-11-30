@@ -47,6 +47,12 @@ export const navData = [
   },
 
   {
+    title: 'Hotels',
+    path: '/hotels',
+    icon: icon('booking-icon'),
+  },
+
+  {
     title: 'Blog',
     path: '/blog',
     icon: icon('ic-blog'),

@@ -36,20 +36,8 @@ export const UpdateUserPage = lazy(() => import('src/pages/updateUser'));
 // Bookings
 export const BookingsPage = lazy(() => import('src/pages/bookings'));
 
-// ----------------------------------------------------------------------
-
-const renderFallback = (
-  <Box display="flex" alignItems="center" justifyContent="center" flex="1 1 auto">
-    <LinearProgress
-      sx={{
-        width: 1,
-        maxWidth: 320,
-        bgcolor: (theme) => varAlpha(theme.vars.palette.text.primaryChannel, 0.16),
-        [`& .${linearProgressClasses.bar}`]: { bgcolor: 'text.primary' },
-      }}
-    />
-  </Box>
-);
+// Hotels
+export const HotelsPage = lazy(() => import('src/pages/hotels'));
 
 export function Router() {
   const { currentToken, errorMessage, successMessage } = useAuth();
@@ -70,7 +58,7 @@ export function Router() {
         {
           element: currentToken ? (
             <DashboardLayout>
-              <Suspense fallback={renderFallback}>
+              <Suspense>
                 <Outlet />
               </Suspense>
             </DashboardLayout>
@@ -94,6 +82,10 @@ export function Router() {
             { path: '/update-user/:id', element: <UpdateUserPage /> },
 
             { path: 'bookings', element: <BookingsPage /> },
+
+            { path: 'hotels', element: <HotelsPage /> },
+            { path: '/create-hotel', element: <AddPlacePage /> },
+            { path: '/update-hotel/:id', element: <UpdatePlacePage /> },
 
             { path: 'blog', element: <BlogPage /> },
           ],

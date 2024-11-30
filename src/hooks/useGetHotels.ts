@@ -1,12 +1,14 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable import/no-unresolved */
 import { useQuery } from '@tanstack/react-query';
-import countryService from 'src/services/country';
+import hotelService from 'src/services/hotel';
 
-export const useGetCountries = (authToken: any) => {
+const HOTELS_PER_PAGE = 12;
+
+export const useGetHotels = (authToken: any, page: number) => {
     const { data, isFetched, isLoading, error, isFetching, refetch } = useQuery({
-        queryKey: ['countries'],
-        queryFn: () => countryService.getCountries(authToken),
+        queryKey: ['hotels', page],
+        queryFn: () => hotelService.getHotels(authToken, page, HOTELS_PER_PAGE),
         refetchOnWindowFocus: true,
         refetchOnMount: 'always',
     });
@@ -14,10 +16,10 @@ export const useGetCountries = (authToken: any) => {
     return { data, isFetched, isLoading, error, refetch, isFetching };
 };
 
-export const useGetCountry = (id: any, authToken: any) => {
+export const useGetHotel = (id: any, authToken: any) => {
     const { data, isFetched, isLoading, error, isFetching, refetch } = useQuery({
-        queryKey: ['country', id],
-        queryFn: () => countryService.getCountry(id, authToken),
+        queryKey: ['hotel', id],
+        queryFn: () => hotelService.getHotel(id, authToken),
         enabled: !!id,
         refetchOnWindowFocus: true,
         refetchOnMount: 'always',

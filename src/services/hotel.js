@@ -45,9 +45,24 @@ const hotelService = {
     addHotel: async (values, authToken) => {
         try {
             const response = await request.post(
-                '/admin/places',
+                '/admin/hotels',
                 {
-
+                    rooms: values?.rooms,
+                    title: values?.title,
+                    description: values?.description,
+                    imageUrl: values?.imageUrl,
+                    category: values?.category,
+                    parkingIncluded: values?.parkingIncluded,
+                    rating: values?.rating,
+                    price: values?.price,
+                    address: {
+                        StreetAddress: values?.address?.StreetAddress,
+                        City: values?.address?.City,
+                        StateProvince: values?.address?.StateProvince,
+                        PostalCode: values?.address?.PostalCode,
+                        Country: values?.address?.Country,
+                    },
+                    location: values?.location,
                 },
                 {
                     headers: {
@@ -66,12 +81,28 @@ const hotelService = {
         }
     },
 
-    updateHotel: async (values, authToken, placeId) => {
+    updateHotel: async (values, authToken, hotelId) => {
         try {
             const response = await request.put(
-                '/admin/places',
+                '/admin/hotels',
                 {
-
+                    hotelId,
+                    rooms: values?.rooms,
+                    title: values?.title,
+                    description: values?.description,
+                    imageUrl: values?.imageUrl,
+                    category: values?.category,
+                    parkingIncluded: values?.parkingIncluded,
+                    rating: values?.rating,
+                    price: values?.price,
+                    address: {
+                        StreetAddress: values?.address?.StreetAddress,
+                        City: values?.address?.City,
+                        StateProvince: values?.address?.StateProvince,
+                        PostalCode: values?.address?.PostalCode,
+                        Country: values?.address?.Country,
+                    },
+                    location: values?.location
                 },
                 {
                     headers: {

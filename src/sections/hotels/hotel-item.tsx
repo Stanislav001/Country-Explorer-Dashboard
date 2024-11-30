@@ -50,7 +50,7 @@ export function HotelItem({ hotel }: { hotel: CountryItemProps }) {
   }, []);
 
   const updateCountryHandler = () => {
-    router.push(`/update-countries/${hotel._id}`);
+    router.push(`/update-hotel/${hotel._id}`);
     handleClosePopover();
   }
 

@@ -40,7 +40,7 @@ export function HotelView() {
           Hotels
         </Typography>
         <Button
-          onClick={() => router.push('/create-countries')}
+          onClick={() => router.push('/create-hotel')}
           variant="contained"
           color="inherit"
           startIcon={<Iconify icon="mingcute:add-line" />}

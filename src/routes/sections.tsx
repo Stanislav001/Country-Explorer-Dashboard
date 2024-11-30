@@ -2,9 +2,7 @@ import { lazy, Suspense } from 'react';
 import { Outlet, Navigate, useRoutes } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
-import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 
-import { varAlpha } from 'src/theme/styles';
 import { AuthLayout } from 'src/layouts/auth';
 import { useAuth } from 'src/context/auth-context';
 import { DashboardLayout } from 'src/layouts/dashboard';
@@ -36,6 +34,8 @@ export const BookingsPage = lazy(() => import('src/pages/bookings'));
 
 // Hotels
 export const HotelsPage = lazy(() => import('src/pages/hotels'));
+export const AddHotelPage = lazy(() => import('src/pages/addHotel'));
+export const UpdateHotelView = lazy(() => import('src/pages/updateHotel'));
 
 export function Router() {
   const { currentToken, errorMessage, successMessage } = useAuth();
@@ -81,8 +81,8 @@ export function Router() {
             { path: 'bookings', element: <BookingsPage /> },
 
             { path: 'hotels', element: <HotelsPage /> },
-            { path: '/create-hotel', element: <AddPlacePage /> },
-            { path: '/update-hotel/:id', element: <UpdatePlacePage /> },
+            { path: '/create-hotel', element: <AddHotelPage /> },
+            { path: '/update-hotel/:id', element: <UpdateHotelView /> },
           ],
         },
         {

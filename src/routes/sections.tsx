@@ -13,9 +13,7 @@ import CustomAlert from 'src/components/CustomAlert';
 // ----------------------------------------------------------------------
 
 export const HomePage = lazy(() => import('src/pages/home'));
-export const BlogPage = lazy(() => import('src/pages/blog'));
 export const SignInPage = lazy(() => import('src/pages/sign-in'));
-export const ProductsPage = lazy(() => import('src/pages/products'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
 
 // Countries 
@@ -67,7 +65,6 @@ export function Router() {
           ),
           children: [
             { element: <HomePage />, index: true },
-            { path: 'products', element: <ProductsPage /> },
 
             { path: 'countries', element: <CountriesPage /> },
             { path: '/create-countries', element: <AddCountryPage /> },
@@ -86,8 +83,6 @@ export function Router() {
             { path: 'hotels', element: <HotelsPage /> },
             { path: '/create-hotel', element: <AddPlacePage /> },
             { path: '/update-hotel/:id', element: <UpdatePlacePage /> },
-
-            { path: 'blog', element: <BlogPage /> },
           ],
         },
         {

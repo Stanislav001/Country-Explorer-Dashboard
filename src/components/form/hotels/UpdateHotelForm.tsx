@@ -23,12 +23,13 @@ import { useParams } from 'react-router-dom';
 import { useRouter } from 'src/routes/hooks';
 import hotelService from 'src/services/hotel';
 import { useAuth } from 'src/context/auth-context';
+import { Divider, Typography } from '@mui/material';
 import { addHotelValidationSchema } from './hotelTypes';
+import FullScreenSpinner from 'src/components/FullScreenSpinner';
 
 import { FormValues } from './hotelTypes';
 import { useGetHotel } from 'src/hooks/useGetHotels';
-import FullScreenSpinner from 'src/components/FullScreenSpinner';
-import { Divider, Typography } from '@mui/material';
+import { useGetCountries } from 'src/hooks/useGetCountries';
 
 const UpdateHotelForm = () => {
     const router = useRouter();
@@ -36,6 +37,7 @@ const UpdateHotelForm = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const { currentToken, setErrorMessage, setSuccessMessage } = useAuth();
+    const { data: countries, isFetched: isCountriesFetched } = useGetCountries(currentToken);
     const { data: hotel, isFetched: isHotelFetched, refetch: refetchHotel } = useGetHotel(id, currentToken);
 
     const updateHotelInitialValues: FormValues = {
@@ -85,7 +87,7 @@ const UpdateHotelForm = () => {
         }
     };
 
-    if (!isHotelFetched) {
+    if (!isHotelFetched || !isCountriesFetched) {
         return <FullScreenSpinner />
     }
 
@@ -177,17 +179,25 @@ const UpdateHotelForm = () => {
 
                             {/* Country */}
                             <Grid item xs={12} sm={4}>
-                                <Field name="address.Country">
-                                    {({ field }: any) => (
-                                        <TextField
-                                            {...field}
-                                            fullWidth
-                                            label="Country"
-                                            error={touched.address?.Country && Boolean(errors.address?.Country)}
-                                            helperText={touched.address?.Country && errors.address?.Country}
-                                        />
+                                <FormControl fullWidth error={touched.address?.Country && Boolean(errors.address?.Country)}>
+                                    <InputLabel>Country</InputLabel>
+                                    <Select
+                                        name="address.Country"
+                                        value={values.address?.Country}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        label="Country"
+                                    >
+                                        {countries?.countries?.map((country: any) => (
+                                            <MenuItem key={country._id} value={country._id}>
+                                                {country.country}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                    {touched.address?.Country && errors.address?.Country && (
+                                        <div>{errors.address?.Country}</div>
                                     )}
-                                </Field>
+                                </FormControl>
                             </Grid>
 
                             {/* City */}

@@ -26,10 +26,13 @@ import hotelService from 'src/services/hotel';
 import addHotelInitialValues from './hotelTypes';
 import { useAuth } from 'src/context/auth-context';
 import { addHotelValidationSchema } from './hotelTypes';
+import { useGetCountries } from 'src/hooks/useGetCountries';
+import FullScreenSpinner from 'src/components/FullScreenSpinner';
 
 const AddHotelForm = () => {
     const router = useRouter();
     const { currentToken, setErrorMessage, setSuccessMessage } = useAuth();
+    const { data: countries, isFetched: isCountriesFetched } = useGetCountries(currentToken);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -51,6 +54,10 @@ const AddHotelForm = () => {
             setIsSubmitting(false);
         }
     };
+
+    if (!isCountriesFetched) {
+        return <FullScreenSpinner />
+    }
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -140,17 +147,25 @@ const AddHotelForm = () => {
 
                             {/* Country */}
                             <Grid item xs={12} sm={4}>
-                                <Field name="address.Country">
-                                    {({ field }: any) => (
-                                        <TextField
-                                            {...field}
-                                            fullWidth
-                                            label="Country"
-                                            error={touched.address?.Country && Boolean(errors.address?.Country)}
-                                            helperText={touched.address?.Country && errors.address?.Country}
-                                        />
+                                <FormControl fullWidth error={touched.address?.Country && Boolean(errors.address?.Country)}>
+                                    <InputLabel>Country</InputLabel>
+                                    <Select
+                                        name="address.Country"
+                                        value={values.address?.Country}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        label="Country"
+                                    >
+                                        {countries?.countries?.map((country: any) => (
+                                            <MenuItem key={country._id} value={country._id}>
+                                                {country.country}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                    {touched.address?.Country && errors.address?.Country && (
+                                        <div>{errors.address?.Country}</div>
                                     )}
-                                </Field>
+                                </FormControl>
                             </Grid>
 
                             {/* City */}
@@ -356,9 +371,9 @@ const AddHotelForm = () => {
                                                                 helperText={<ErrorMessage name={`rooms[${index}].imageUrl`} />}
                                                             />
                                                         </Grid>
-                                                        
-                                                         {/* Room Rating */}
-                                                         <Grid item xs={12} sm={4} md={2} lg={2}>
+
+                                                        {/* Room Rating */}
+                                                        <Grid item xs={12} sm={4} md={2} lg={2}>
                                                             <TextField
                                                                 fullWidth
                                                                 label="Room Rating"

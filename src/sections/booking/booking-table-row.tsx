@@ -69,8 +69,8 @@ export function BookingTableRow({ row }: BookingTableRowProps) {
      <TableRow hover tabIndex={-1} role="checkbox">
       <TableCell component="th" scope="row">
         <Box gap={2} display="flex" alignItems="center">
-          <Avatar alt={row.hotel.title} src={row.hotel.imageUrl} />
-          {row.hotel.title ?? 'N/A'}
+          <Avatar alt={row?.hotel?.title} src={row?.hotel?.imageUrl} />
+          {row?.hotel?.title ?? 'N/A'}
         </Box>
       </TableCell>
 

@@ -3,11 +3,12 @@
 import { useQuery } from '@tanstack/react-query';
 import placeService from 'src/services/place';
 
-export const useGetPlaces = (authToken: any) => {
+const PLACE_PER_PAGE = 12
+
+export function useGetPlaces(authToken: string, page: number, filters?: any) {
     const { data, isFetched, isLoading, error, isFetching, refetch } = useQuery({
-        queryKey: ['places'],
-        queryFn: () => placeService.getPlaces(authToken),
-        // keepPreviousData: false,
+        queryKey: ['places', page, filters],
+        queryFn: () => placeService.getPlaces(authToken, page, PLACE_PER_PAGE, filters),
         refetchOnWindowFocus: true,
         refetchOnMount: 'always',
     });

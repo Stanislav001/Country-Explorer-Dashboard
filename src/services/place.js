@@ -4,11 +4,18 @@
 import { request } from "../helpers/request";
 
 const placeService = {
-  getPlaces: async (authToken) => {
+  getPlaces: async (authToken, page, limit, filters) => {
+    console.log('filters', filters);
+    
     try {
       const response = await request.get('/admin/places', {
         headers: {
           Authorization: `Bearer ${authToken}`,
+        },
+        params: {
+          page,
+          limit,
+          countryName: filters?.countries,
         }
       });
 

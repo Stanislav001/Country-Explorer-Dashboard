@@ -15,7 +15,6 @@ import { Iconify } from 'src/components/iconify';
 
 import placeService from 'src/services/place';
 import { useAuth } from 'src/context/auth-context';
-import { useGetPlaces } from 'src/routes/hooks/useGetPlaces';
 
 export type PlaceItemProps = {
   _id: string;
@@ -25,11 +24,11 @@ export type PlaceItemProps = {
   rating: number;
 };
 
-export function PlaceItem({ place }: { place: PlaceItemProps }) {
+export function PlaceItem({ place, refetchPlaces }: { place: PlaceItemProps, refetchPlaces: () => void }) {
   const router = useRouter();
   const { currentToken, setErrorMessage, setSuccessMessage } = useAuth();
   
-  const { refetch: refetchPlaces } = useGetPlaces(currentToken);
+  // const { refetch: refetchPlaces } = useGetPlaces(currentToken);
   const [openPopover, setOpenPopover] = useState<HTMLButtonElement | null>(null);
 
   const handleOpenPopover = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {

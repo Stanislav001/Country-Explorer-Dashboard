@@ -87,9 +87,7 @@ const UpdatePlaceForm = () => {
                     confirmed: Boolean(place?.place?.confirmed) || false,
                 }}
                 validationSchema={validationSchema}
-                onSubmit={(values) => {
-                    console.log('values');
-                }}
+                onSubmit={(values) => { }}
             >
                 {({ values, handleChange, handleBlur, errors, touched }) => (
                     <Form>

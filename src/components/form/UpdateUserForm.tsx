@@ -138,9 +138,6 @@ const UpdateUserForm = () => {
                                     <MenuItem key="user" value="user">User</MenuItem>
                                     <MenuItem key="admin" value="admin">Admin</MenuItem>
                                     </Select>
-                                    {touched.role && errors.role&& (
-                                        <div>{errors?.role}</div>
-                                    )}
                                 </FormControl>
                             </Grid>                     
 

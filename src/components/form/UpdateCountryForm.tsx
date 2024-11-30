@@ -168,7 +168,7 @@ const UpdateCountryForm = () => {
                                     variant="contained"
                                     loading={isSubmitting}
                                 >
-                                    Create Country
+                                    Update Country
                                 </LoadingButton>
                             </Grid>
                         </Grid>

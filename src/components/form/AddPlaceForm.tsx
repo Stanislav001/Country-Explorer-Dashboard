@@ -78,9 +78,7 @@ const AddPlaceForm = () => {
                     confirmed: false,
                 }}
                 validationSchema={validationSchema}
-                onSubmit={(values) => {
-                    console.log('values');
-                }}
+                onSubmit={(values) => {}}
             >
                 {({ values, handleChange, handleBlur, errors, touched }) => (
                     <Form>

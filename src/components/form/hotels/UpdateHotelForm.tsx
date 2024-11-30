@@ -323,8 +323,8 @@ const UpdateHotelForm = () => {
                                         <Box sx={{ p: 2, mt: 2 }} display="flex" flexWrap="wrap">
                                             <InputLabel id="rooms-label">Rooms</InputLabel>
                                             {values.rooms.map((room, index) => (
-                                                <>
-                                                    <Grid container spacing={2} key={index} style={{ marginTop: 1, alignItems: 'center' }}>
+                                                <Box key={index}>
+                                                    <Grid container spacing={2} style={{ marginTop: 1, alignItems: 'center' }}>
                                                         {/* Room Title */}
                                                         <Grid item xs={12} sm={4} md={2} lg={2}>
                                                             <TextField
@@ -436,7 +436,7 @@ const UpdateHotelForm = () => {
                                                     {values?.rooms?.length > 1 ? <Divider sx={{ width: "100%", my: 2 }} >
                                                         <Typography variant="caption" color="textSecondary">Room {index + 1}</Typography>
                                                     </Divider> : null}
-                                                </>
+                                                </Box>
                                             ))}
 
                                             {/* Add Room Button */}

@@ -28,10 +28,9 @@ const UpdateCountryForm = () => {
     const router = useRouter();
     const { id } = useParams();
 
-    const { currentToken } = useAuth();
+    const { currentToken, setErrorMessage, setSuccessMessage } = useAuth();
     const { data: country, isFetched: isCountryFetched, refetch: refetchCountry } = useGetCountry(id, currentToken);
 
-    const [errorMessage, setErrorMessage] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleUpdateCountry = async (values: any) => {
@@ -41,6 +40,7 @@ const UpdateCountryForm = () => {
 
             if (result.status) {
                 setErrorMessage('');
+                setSuccessMessage('Country updated successfully');
                 await refetchCountry();
                 router.push('/countries');
             } else {
@@ -157,13 +157,6 @@ const UpdateCountryForm = () => {
                                     )}
                                 </Field>
                             </Grid>
-
-                            {/* Error Message */}
-                            {errorMessage && (
-                                <Grid item xs={12}>
-                                    <Box sx={{ color: 'error.main', mb: 2 }}>{errorMessage}</Box>
-                                </Grid>
-                            )}
 
                             {/* Submit Button */}
                             <Grid item xs={12}>

@@ -27,11 +27,9 @@ export type PlaceItemProps = {
 
 export function PlaceItem({ place }: { place: PlaceItemProps }) {
   const router = useRouter();
-  const { currentToken } = useAuth();
+  const { currentToken, setErrorMessage, setSuccessMessage } = useAuth();
   
   const { refetch: refetchPlaces } = useGetPlaces(currentToken);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [openPopover, setOpenPopover] = useState<HTMLButtonElement | null>(null);
 
   const handleOpenPopover = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {

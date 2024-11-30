@@ -3,12 +3,24 @@
 import { request } from "../helpers/request";
 
 const userService = {
-    getUsers: async (authToken) => {
+    getUsers: async (authToken, filters) => {
         try {
+            console.log('filters', filters);
+            const queryParams = {};
+
+            if (filters?.userRole !== 'all' && filters?.userRole) {
+                queryParams.userRole = filters?.userRole;
+            }
+
+            if (filters?.userType !== 'all' && filters?.userType) {
+                queryParams.userType = filters?.userType;
+            }
+
             const response = await request.get('/admin/users', {
                 headers: {
                     Authorization: `Bearer ${authToken}`,
-                }
+                },
+                params: queryParams
             });
 
             if (response.status === 200) {
@@ -40,7 +52,7 @@ const userService = {
     deleteUser: async (id, authToken) => {
         try {
             const response = await request.delete('/admin/users', {
-                data: { countryId: id },
+                data: { userId: id },
                 headers: {
                     Authorization: `Bearer ${authToken}`,
                 },
@@ -59,11 +71,11 @@ const userService = {
             const response = await request.post(
                 '/admin/users',
                 {
-                    country: values?.country,
-                    description: values?.description,
-                    imageUrl: values?.imageUrl,
-                    region: values?.region,
-                    confirmed: values?.confirmed,
+                    username: values?.username,
+                    email: values?.email,
+                    password: values?.password,
+                    role: values?.role,
+                    profile: values?.profile,
                 },
                 {
                     headers: {
@@ -78,20 +90,19 @@ const userService = {
                 throw new Error('Something went wrong');
             }
         } catch (error) {
-            throw error;
+            throw error?.response?.data?.message || "Something went wrong";
         }
     },
-    updateUser: async (values, authToken, countryId) => {
+    updateUser: async (values, authToken, userId) => {
         try {
             const response = await request.put(
                 '/admin/users',
                 {
-                    countryId,
-                    country: values?.country,
-                    description: values?.description,
-                    imageUrl: values?.imageUrl,
-                    region: values?.region,
-                    confirmed: values?.confirmed,
+                    userId,
+                    username: values?.username,
+                    email: values?.email,
+                    role: values?.role,
+                    profile: values?.profile,
                 },
                 {
                     headers: {

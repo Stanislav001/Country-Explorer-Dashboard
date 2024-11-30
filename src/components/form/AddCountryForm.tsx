@@ -25,9 +25,8 @@ const validationSchema = Yup.object().shape({
 
 const AddCountryForm = () => {
     const router = useRouter();
-    const { currentToken } = useAuth();
+    const { currentToken, setErrorMessage, setSuccessMessage } = useAuth();
 
-    const [errorMessage, setErrorMessage] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleCreateCountry = async (values: any) => {
@@ -37,6 +36,7 @@ const AddCountryForm = () => {
 
             if (result.status) {
                 setErrorMessage('');
+                setSuccessMessage('Country created successfully');
                 router.push('/countries');
             } else {
                 setErrorMessage(result.message || 'Failed to create country');
@@ -148,13 +148,6 @@ const AddCountryForm = () => {
                                     )}
                                 </Field>
                             </Grid>
-
-                            {/* Error Message */}
-                            {errorMessage && (
-                                <Grid item xs={12}>
-                                    <Box sx={{ color: 'error.main', mb: 2 }}>{errorMessage}</Box>
-                                </Grid>
-                            )}
 
                             {/* Submit Button */}
                             <Grid item xs={12}>

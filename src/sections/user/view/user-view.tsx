@@ -1,3 +1,4 @@
+/* eslint-disable import/no-duplicates */
 /* eslint-disable import/order */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable perfectionist/sort-imports */
@@ -12,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
+import { useRouter } from 'src/routes/hooks';
 import { _users } from 'src/_mock';
 import { DashboardContent } from 'src/layouts/dashboard';
 
@@ -23,30 +25,85 @@ import { UserTableHead } from '../user-table-head';
 import { TableEmptyRows } from '../table-empty-rows';
 import { emptyRows } from '../utils';
 
+import { UserFilters } from '../user-filters';
+import { FiltersProps } from '../user-filters';
+
 import { useGetUsers } from 'src/routes/hooks/useGetUsers';
 import { useAuth } from 'src/context/auth-context';
 
+const USER_ROLE_OPTIONS = [
+  { value: 'all', label: 'All' },
+  { value: 'user', label: 'User' },
+  { value: 'admin', label: 'Admin' },
+];
+
+const USER_TYPE_OPTIONS = [
+  { value: 'all', label: 'All' },
+  { value: 'verified', label: 'Verified' },
+  { value: 'unverified', label: 'Unverified' },
+];
+
+const defaultFilters = {
+  userRole: USER_ROLE_OPTIONS[0].value,
+  userType: USER_TYPE_OPTIONS[0].value,
+};
+
 export function UserView() {
   const table = useTable();
+  const router = useRouter();
+  
+  const [openFilter, setOpenFilter] = useState(false);
+  const [filters, setFilters] = useState<FiltersProps>(defaultFilters);
 
   const { currentToken } = useAuth();
+  const { data: users, isFetched: usersIsFetched, refetch: refetchUsers } = useGetUsers(currentToken, filters);
 
-  const { data: users, isFetched: userIsFetched } = useGetUsers(currentToken);
+  const handleOpenFilter = useCallback(() => {
+    setOpenFilter(true);
+  }, []);
 
+  const handleCloseFilter = useCallback(() => {
+    setOpenFilter(false);
+  }, []);
+
+  const handleSetFilters = useCallback(async (updateState: Partial<FiltersProps>) => {
+    setFilters((prevValue) => ({ ...prevValue, ...updateState }));
+    await refetchUsers();
+  }, [refetchUsers]);
+  
   return (
     <DashboardContent>
       <Box display="flex" alignItems="center" mb={5}>
         <Typography variant="h4" flexGrow={1}>
           Users
         </Typography>
+
         <Button
           variant="contained"
           color="inherit"
+          onClick={() => router.push('/create-user')}
           startIcon={<Iconify icon="mingcute:add-line" />}
         >
           New user
         </Button>
       </Box>
+
+      <Box display="flex" alignItems="center" flexWrap="wrap-reverse" justifyContent="flex-end" sx={{ mb: 5 }}>
+          <Box gap={1} display="flex" flexShrink={0} sx={{ my: 1 }}>
+            <UserFilters
+              filters={filters}
+              onSetFilters={handleSetFilters}
+              openFilter={openFilter}
+              onOpenFilter={handleOpenFilter}
+              onCloseFilter={handleCloseFilter}
+              options={{
+                userRole: USER_ROLE_OPTIONS,
+                userType: USER_TYPE_OPTIONS,
+              }}
+            />
+
+          </Box>
+        </Box>
 
       <Card>
         <Scrollbar>
@@ -65,16 +122,17 @@ export function UserView() {
                 {users?.users?.slice(
                   table.page * table.rowsPerPage,
                   table.page * table.rowsPerPage + table.rowsPerPage
-                ).map((user : any) => (
-                    <UserTableRow
-                      key={user._id}
-                      row={user}
-                    />
-                  ))}
+                ).map((user: any) => (
+                  <UserTableRow
+                    key={user._id}
+                    row={user}
+                    refetchUsers={refetchUsers}
+                  />
+                ))}
 
                 <TableEmptyRows
                   height={68}
-                  emptyRows={emptyRows(table.page, table.rowsPerPage, _users.length)}
+                  emptyRows={emptyRows(table.page, table.rowsPerPage, users?.users?.length)}
                 />
               </TableBody>
             </Table>
@@ -84,7 +142,7 @@ export function UserView() {
         <TablePagination
           component="div"
           page={table.page}
-          count={_users.length}
+          count={users?.users?.length}
           rowsPerPage={table.rowsPerPage}
           onPageChange={table.onChangePage}
           rowsPerPageOptions={[5, 10, 25]}

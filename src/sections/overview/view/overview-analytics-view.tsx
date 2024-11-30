@@ -17,13 +17,17 @@ import { AnalyticsTrafficBySite } from '../analytics-traffic-by-site';
 import { AnalyticsCurrentSubject } from '../analytics-current-subject';
 import { AnalyticsConversionRates } from '../analytics-conversion-rates';
 
+import { useGetUsers } from 'src/routes/hooks/useGetUsers';
 import { useGetCountries } from 'src/routes/hooks/useGetCountries';
+import { useGetBookings } from 'src/hooks/useGetBookings';
 // ----------------------------------------------------------------------
 
 export function OverviewAnalyticsView() {
   const { currentUser, currentToken } = useAuth();
 
-  const {data: countries, isFetched: isCountriesFetched} = useGetCountries(currentToken);
+  const { data: users, isFetched: isUsersFetched } = useGetUsers(currentToken);
+  const { data: countries, isFetched: isCountriesFetched } = useGetCountries(currentToken);
+  const { data: bookings, isFetched: isBookingsFetched } = useGetBookings(currentToken);
 
   return (
     <DashboardContent maxWidth="xl">
@@ -35,7 +39,7 @@ export function OverviewAnalyticsView() {
         <Grid xs={12} sm={6} md={3}>
           <AnalyticsWidgetSummary
             title="Bookings"
-            total={714000}
+            total={bookings?.length}
             icon={<img alt="icon" src="/assets/icons/glass/ic-glass-bag.svg" />}
           />
         </Grid>
@@ -43,7 +47,7 @@ export function OverviewAnalyticsView() {
         <Grid xs={12} sm={6} md={3}>
           <AnalyticsWidgetSummary
             title="Users"
-            total={1352831}
+            total={users?.users?.length}
             color="secondary"
             icon={<img alt="icon" src="/assets/icons/glass/ic-glass-users.svg" />}
           />

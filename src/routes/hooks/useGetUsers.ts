@@ -3,10 +3,10 @@
 import { useQuery } from '@tanstack/react-query';
 import userService from 'src/services/user';
 
-export const useGetUsers = (authToken: any) => {
+export const useGetUsers = (authToken: any, filters?: any) => {
     const { data, isFetched, isLoading, error, isFetching, refetch } = useQuery({
-        queryKey: ['users-list'],
-        queryFn: () => userService.getUsers(authToken),
+        queryKey: ['users-list', filters],
+        queryFn: () => userService.getUsers(authToken, filters),
         refetchOnWindowFocus: true,
         refetchOnMount: 'always',
     });

@@ -39,12 +39,11 @@ const validationSchema = Yup.object().shape({
 const UpdatePlaceForm = () => {
     const router = useRouter();
     const { id } = useParams();
-    const { currentToken } = useAuth();
+    const { currentToken, setErrorMessage, setSuccessMessage } = useAuth();
 
     const { data: countries } = useGetCountries(currentToken);
     const { data: place, isFetched: isPlaceFetched, refetch: refetchPlace } = useGetPlace(id, currentToken);
 
-    const [errorMessage, setErrorMessage] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleUpdatePlace = async (values: any) => {
@@ -54,6 +53,7 @@ const UpdatePlaceForm = () => {
 
             if (result.status) {
                 setErrorMessage('');
+                setSuccessMessage('Place updated successfully');
                 await refetchPlace();
                 router.push('/places');
             } else {
@@ -263,12 +263,6 @@ const UpdatePlaceForm = () => {
                                     )}
                                 </Field>
                             </Grid>
-
-                            {errorMessage && (
-                                <Grid item xs={12}>
-                                    <Box sx={{ color: 'error.main', mb: 2 }}>{errorMessage}</Box>
-                                </Grid>
-                            )}
 
                             <Grid item xs={12}>
                                 <LoadingButton

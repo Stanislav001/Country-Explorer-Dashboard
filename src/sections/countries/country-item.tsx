@@ -26,11 +26,9 @@ export type CountryItemProps = {
 
 export function CountryItem({ country }: { country: CountryItemProps }) {
   const router = useRouter();
-  const { currentToken } = useAuth();
+  const { currentToken, setErrorMessage, setSuccessMessage } = useAuth();
   
   const { refetch: refetchCountries } = useGetCountries(currentToken);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [openPopover, setOpenPopover] = useState<HTMLButtonElement | null>(null);
 
   const handleOpenPopover = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {

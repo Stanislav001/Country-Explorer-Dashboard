@@ -36,11 +36,10 @@ const validationSchema = Yup.object().shape({
 
 const AddPlaceForm = () => {
     const router = useRouter();
-    const { currentToken } = useAuth();
+    const { currentToken, setErrorMessage, setSuccessMessage } = useAuth();
 
     const { data: countries } = useGetCountries(currentToken);
 
-    const [errorMessage, setErrorMessage] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleCreatePlace = async (values: any) => {
@@ -50,6 +49,7 @@ const AddPlaceForm = () => {
 
             if (result.status) {
                 setErrorMessage('');
+                setSuccessMessage('Place created successfully');
                 router.push('/places');
             } else {
                 setErrorMessage(result.message || 'Failed to create place');
@@ -256,12 +256,6 @@ const AddPlaceForm = () => {
                                     )}
                                 </Field>
                             </Grid>
-
-                            {errorMessage && (
-                                <Grid item xs={12}>
-                                    <Box sx={{ color: 'error.main', mb: 2 }}>{errorMessage}</Box>
-                                </Grid>
-                            )}
 
                             <Grid item xs={12}>
                                 <LoadingButton

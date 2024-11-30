@@ -9,11 +9,11 @@ import { AuthLayout } from 'src/layouts/auth';
 import { useAuth } from 'src/context/auth-context';
 import { DashboardLayout } from 'src/layouts/dashboard';
 
+import CustomAlert from 'src/components/CustomAlert';
 // ----------------------------------------------------------------------
 
 export const HomePage = lazy(() => import('src/pages/home'));
 export const BlogPage = lazy(() => import('src/pages/blog'));
-export const UserPage = lazy(() => import('src/pages/user'));
 export const SignInPage = lazy(() => import('src/pages/sign-in'));
 export const ProductsPage = lazy(() => import('src/pages/products'));
 export const Page404 = lazy(() => import('src/pages/page-not-found'));
@@ -27,6 +27,14 @@ export const UpdateCountryView = lazy(() => import('src/pages/updateCountries'))
 export const PlacesPage = lazy(() => import('src/pages/places'));
 export const AddPlacePage = lazy(() => import('src/pages/addPlace'));
 export const UpdatePlacePage = lazy(() => import('src/pages/updatePlace'));
+
+// Users
+export const UsersPage = lazy(() => import('src/pages/user'));
+export const AddUserPage = lazy(() => import('src/pages/addUser'));
+export const UpdateUserPage = lazy(() => import('src/pages/updateUser'));
+
+// Bookings
+export const BookingsPage = lazy(() => import('src/pages/bookings'));
 
 // ----------------------------------------------------------------------
 
@@ -44,50 +52,69 @@ const renderFallback = (
 );
 
 export function Router() {
-  const { currentToken } = useAuth();
+  const { currentToken, errorMessage, successMessage } = useAuth();
 
-  return useRoutes([
-    {
-      element: currentToken ? (
-        <DashboardLayout>
-          <Suspense fallback={renderFallback}>
-            <Outlet />
-          </Suspense>
-        </DashboardLayout>
-      ) : (
-        <Navigate to="/sign-in" replace />
-      ),
-      children: [
-        { element: <HomePage />, index: true },
-        { path: 'user', element: <UserPage /> },
-        { path: 'products', element: <ProductsPage /> },
+  return (
+    <>
+      {errorMessage ? (
+        <Box flexGrow={1} display="flex" justifyContent="flex-end">
+          <CustomAlert message={errorMessage} type="error" />
+        </Box>
+      ) : successMessage ? (
+        <Box flexGrow={1} display="flex" justifyContent="center">
+          <CustomAlert message={successMessage} type="success" />
+        </Box>
+      ) : null}
 
-        { path: 'countries', element: <CountriesPage /> },
-        { path: '/create-countries', element: <AddCountryPage /> },
-        { path: '/update-countries/:id', element: <UpdateCountryView /> },
+      {useRoutes([
+        {
+          element: currentToken ? (
+            <DashboardLayout>
+              <Suspense fallback={renderFallback}>
+                <Outlet />
+              </Suspense>
+            </DashboardLayout>
+          ) : (
+            <Navigate to="/sign-in" replace />
+          ),
+          children: [
+            { element: <HomePage />, index: true },
+            { path: 'products', element: <ProductsPage /> },
 
-        { path: 'places', element: <PlacesPage /> },
-        { path: '/create-place', element: <AddPlacePage /> },
-        { path: '/update-place/:id', element: <UpdatePlacePage /> },
+            { path: 'countries', element: <CountriesPage /> },
+            { path: '/create-countries', element: <AddCountryPage /> },
+            { path: '/update-countries/:id', element: <UpdateCountryView /> },
 
-        { path: 'blog', element: <BlogPage /> },
-      ],
-    },
-    {
-      path: 'sign-in',
-      element: (
-        <AuthLayout>
-          <SignInPage />
-        </AuthLayout>
-      ),
-    },
-    {
-      path: '404',
-      element: <Page404 />,
-    },
-    {
-      path: '*',
-      element: <Navigate to="/404" replace />,
-    },
-  ]);
+            { path: 'places', element: <PlacesPage /> },
+            { path: '/create-place', element: <AddPlacePage /> },
+            { path: '/update-place/:id', element: <UpdatePlacePage /> },
+            
+            { path: 'users', element: <UsersPage /> },
+            { path: '/create-user', element: <AddUserPage /> },
+            { path: '/update-user/:id', element: <UpdateUserPage /> },
+
+            { path: 'bookings', element: <BookingsPage /> },
+
+            { path: 'blog', element: <BlogPage /> },
+          ],
+        },
+        {
+          path: 'sign-in',
+          element: (
+            <AuthLayout>
+              <SignInPage />
+            </AuthLayout>
+          ),
+        },
+        {
+          path: '404',
+          element: <Page404 />,
+        },
+        {
+          path: '*',
+          element: <Navigate to="/404" replace />,
+        },
+      ])}
+    </>
+  );
 }

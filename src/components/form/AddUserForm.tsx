@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 /* eslint-disable perfectionist/sort-named-imports */
 /* eslint-disable perfectionist/sort-imports */
 import * as Yup from 'yup';
@@ -5,37 +6,60 @@ import { Formik, Field, Form } from 'formik';
 import { useState } from 'react';
 
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
-import LoadingButton from '@mui/lab/LoadingButton';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
 import Grid from '@mui/material/Grid';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import LoadingButton from '@mui/lab/LoadingButton';
+import FormControl from '@mui/material/FormControl';
 
-import { useRouter } from 'src/routes/hooks';
-import { useAuth } from 'src/context/auth-context';
+import ImageUpload from '../ImageUpload';
 import userService from 'src/services/user';
+import { useRouter } from 'src/routes/hooks';
+import CustomImageList from '../CustomImageList';
+import { useAuth } from 'src/context/auth-context';
+import useImageUploader from 'src/hooks/useImageUploader';
 
 // Define the validation schema using Yup
 const validationSchema = Yup.object().shape({
     username: Yup.string().required('Username is required'),
     password: Yup.string().required('Password is required'),
     email: Yup.string().email('Must be a valid email').required('Email is required'),
-    profile: Yup.string().url('Must be a valid URL').required('Image URL is required'),
     role: Yup.string().required('Role is required'),
 });
 
-
 const AddUserForm = () => {
     const router = useRouter();
+    const { uploadImage, imageUrl, setImageUrl } = useImageUploader();
     const { currentToken, setErrorMessage, setSuccessMessage } = useAuth();
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const removeImageHandler = () =>  {
+        if (setImageUrl) {
+            setImageUrl("");
+        }
+    }
+    
+    const onImageInputChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            await uploadImage(file);
+        }
+    };
+
     const handleCreateUser = async (values: any) => {
         setIsSubmitting(true);
+        
         try {
+            if (!imageUrl) {
+                setErrorMessage('Profile image is required');
+                setIsSubmitting(false);
+                return;
+            }
+
+            values.profile = imageUrl;
             const result = await userService.addUser(values, currentToken);
 
             if (result.status) {
@@ -59,13 +83,12 @@ const AddUserForm = () => {
                     username: '',
                     password: '',
                     email: '',
-                    profile: '',
                     role: '',
                 }}
                 validationSchema={validationSchema}
                 onSubmit={handleCreateUser}
             >
-                {({ values, handleChange, handleBlur, errors, touched }) => (
+                {({ values, handleChange, handleBlur, errors, touched, setFieldValue }) => (
                     <Form>
                         <Grid container spacing={3}>
                             {/* Username */}
@@ -118,23 +141,7 @@ const AddUserForm = () => {
                                 </Field>
                             </Grid>
 
-                            {/* Profile URL */}
-                            <Grid item xs={12} sm={12} md={6} lg={4}>
-                                <Field name="profile">
-                                    {({ field }: any) => (
-                                        <TextField
-                                            {...field}
-                                            fullWidth
-                                            label="Image URL"
-                                            InputLabelProps={{ shrink: true }}
-                                            error={touched.profile && Boolean(errors.profile)}
-                                            helperText={touched.profile && errors.profile}
-                                        />
-                                    )}
-                                </Field>
-                            </Grid>
-
-                            {/* Role */}     
+                            {/* Role */}
                             <Grid item xs={12} sm={6} md={6} lg={4}>
                                 <FormControl fullWidth error={touched.role && Boolean(errors.role)}>
                                     <InputLabel>Role</InputLabel>
@@ -145,15 +152,27 @@ const AddUserForm = () => {
                                         onBlur={handleBlur}
                                         label="Role"
                                     >
-                                    <MenuItem key="user" value="User">User</MenuItem>
-                                    <MenuItem key="admin" value="Admin">Admin</MenuItem>
+                                        <MenuItem key="user" value="User">User</MenuItem>
+                                        <MenuItem key="admin" value="Admin">Admin</MenuItem>
                                     </Select>
-                                    {touched.role && errors.role&& (
+                                    {touched.role && errors.role && (
                                         <div>{errors.role}</div>
                                     )}
                                 </FormControl>
+                            </Grid>
 
-                            </Grid>                     
+                            <Grid item xs={12} sm={12} md={12}>
+                                <CustomImageList
+                                    label="Upload Profile Image"
+                                    images={imageUrl ? [imageUrl] : []}
+                                    handleImageUpload={(files) => {
+                                        if (files) {
+                                            onImageInputChange({ target: { files } } as any);
+                                        }
+                                    }}
+                                    removeImageHandler={removeImageHandler}
+                                />
+                            </Grid>
 
                             {/* Submit Button */}
                             <Grid item xs={12}>

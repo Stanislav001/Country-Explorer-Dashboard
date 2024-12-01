@@ -59,6 +59,7 @@ const placeService = {
           latitude: values?.latitude,
           longitude: values?.longitude,
           confirmed: values?.confirmed,
+          hotelIds: values?.hotelIds,
         },
         {
           headers: {
@@ -94,6 +95,7 @@ const placeService = {
           latitude: values?.latitude,
           longitude: values?.longitude,
           confirmed: values?.confirmed,
+          hotelIds: values?.hotelIds,
         },
         {
           headers: {

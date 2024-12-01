@@ -1,3 +1,5 @@
+/* eslint-disable perfectionist/sort-named-imports */
+/* eslint-disable perfectionist/sort-imports */
 import * as Yup from 'yup';
 import { Formik, Field, Form } from 'formik';
 import { useState } from 'react';
@@ -16,6 +18,7 @@ import FormControl from '@mui/material/FormControl';
 import { useRouter } from 'src/routes/hooks';
 import { useAuth } from 'src/context/auth-context';
 import placeService from 'src/services/place';
+import { useGetHotelsOptions } from 'src/hooks/useGetHotels';
 import { useGetCountries } from 'src/hooks/useGetCountries';
 
 // Define the validation schema using Yup
@@ -32,6 +35,7 @@ const validationSchema = Yup.object().shape({
     longitude: Yup.number().required('Longitude is required'),
     popular: Yup.array().of(Yup.string()).required('Popular places are required'),
     confirmed: Yup.boolean().required('Confirmation status is required'),
+    hotelIds: Yup.array().of(Yup.string()).required('Hotels are required'),
 });
 
 const AddPlaceForm = () => {
@@ -39,6 +43,7 @@ const AddPlaceForm = () => {
     const { currentToken, setErrorMessage, setSuccessMessage } = useAuth();
 
     const { data: countries } = useGetCountries(currentToken);
+    const { data: hotels } = useGetHotelsOptions(currentToken);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -76,9 +81,10 @@ const AddPlaceForm = () => {
                     latitude: 0,
                     longitude: 0,
                     confirmed: false,
+                    hotelIds: [],
                 }}
                 validationSchema={validationSchema}
-                onSubmit={(values) => {}}
+                onSubmit={(values) => { }}
             >
                 {({ values, handleChange, handleBlur, errors, touched }) => (
                     <Form>
@@ -111,7 +117,6 @@ const AddPlaceForm = () => {
                                         <div>{errors.country_id}</div>
                                     )}
                                 </FormControl>
-
                             </Grid>
 
                             {/* Title */}
@@ -200,6 +205,31 @@ const AddPlaceForm = () => {
                                         />
                                     )}
                                 </Field>
+                            </Grid>
+
+                            {/* Hotels */}
+                            <Grid item xs={12} sm={6} md={6}>
+                                <FormControl fullWidth error={touched.hotelIds && Boolean(errors.hotelIds)}>
+                                    <InputLabel>Hotels</InputLabel>
+                                    <Select
+                                        name="hotelIds"
+                                        value={values.hotelIds}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        label="Hotels"
+                                        multiple
+                                        renderValue={(selected) => selected.map(id => hotels.find((hotel: any) => hotel._id === id)?.title).join(', ')} // Display selected hotel titles
+                                    >
+                                        {hotels?.map((hotel: any) => (
+                                            <MenuItem key={hotel._id} value={hotel._id}>
+                                                {hotel.title}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                    {touched.hotelIds && errors.hotelIds && (
+                                        <div>{errors.hotelIds}</div>
+                                    )}
+                                </FormControl>
                             </Grid>
 
                             {/* Image URL */}

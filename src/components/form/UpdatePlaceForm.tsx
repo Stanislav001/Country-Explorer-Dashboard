@@ -1,3 +1,5 @@
+/* eslint-disable perfectionist/sort-named-imports */
+/* eslint-disable perfectionist/sort-imports */
 import * as Yup from 'yup';
 import { Formik, Field, Form } from 'formik';
 import { useState } from 'react';
@@ -19,6 +21,7 @@ import { useAuth } from 'src/context/auth-context';
 import placeService from 'src/services/place';
 import { useGetCountries } from 'src/hooks/useGetCountries';
 import { useGetPlace } from 'src/hooks/useGetPlaces';
+import { useGetHotelsOptions } from 'src/hooks/useGetHotels';
 
 // Define the validation schema using Yup
 const validationSchema = Yup.object().shape({
@@ -34,6 +37,7 @@ const validationSchema = Yup.object().shape({
     longitude: Yup.number().required('Longitude is required'),
     popular: Yup.array().of(Yup.string()).required('Popular places are required'),
     confirmed: Yup.boolean().required('Confirmation status is required'),
+    hotelIds: Yup.array().of(Yup.string()).required('Hotels are required'),
 });
 
 const UpdatePlaceForm = () => {
@@ -42,6 +46,7 @@ const UpdatePlaceForm = () => {
     const { currentToken, setErrorMessage, setSuccessMessage } = useAuth();
 
     const { data: countries } = useGetCountries(currentToken);
+    const { data: hotels } = useGetHotelsOptions(currentToken);
     const { data: place, isFetched: isPlaceFetched, refetch: refetchPlace } = useGetPlace(id, currentToken);
 
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -85,6 +90,7 @@ const UpdatePlaceForm = () => {
                     latitude: place?.place?.latitude || 0,
                     longitude: place?.place?.longitude || 0,
                     confirmed: Boolean(place?.place?.confirmed) || false,
+                    hotelIds: place?.place?.popular?.map((hotel: any) => hotel._id) || []
                 }}
                 validationSchema={validationSchema}
                 onSubmit={(values) => { }}
@@ -207,6 +213,33 @@ const UpdatePlaceForm = () => {
                                         />
                                     )}
                                 </Field>
+                            </Grid>
+
+                            {/* Hotels */}
+                            <Grid item xs={12} sm={6} md={6}>
+                                <FormControl fullWidth error={touched.hotelIds && Boolean(errors.hotelIds)}>
+                                    <InputLabel>Hotels</InputLabel>
+                                    <Select
+                                        name="hotelIds"
+                                        value={values.hotelIds}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        label="Hotels"
+                                        multiple
+                                        renderValue={selected =>
+                                            selected
+                                                .map((idValue: string) => hotels.find((hotel: any) => hotel._id === idValue)?.title)
+                                                .join(', ')  // Directly return the concatenated string
+                                        }
+                                    // renderValue={(selected) => selected.map((idValue: string) => hotels.find((hotel: any) => hotel._id === idValue)?.title).join(', ')} // Display selected hotel titles
+                                    >
+                                        {hotels?.map((hotel: any) => (
+                                            <MenuItem key={hotel._id} value={hotel._id}>
+                                                {hotel.title}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
                             </Grid>
 
                             {/* Image URL */}

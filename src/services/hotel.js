@@ -141,7 +141,25 @@ const hotelService = {
         } catch (error) {
             throw error;
         }
-    }
+    },
+
+    getHotelsOptions: async (authToken) => {
+        try {
+            const response = await request.get('/admin/hotels/options-hotels', {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
+            });
+
+            if (response.status === 200) {
+                return response.data;
+            } else {
+                throw new Error('Something went wrong');
+            }
+        } catch (error) {
+            throw error;
+        }
+    },
 };
 
 export default hotelService;

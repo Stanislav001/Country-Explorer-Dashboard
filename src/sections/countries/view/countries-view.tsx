@@ -4,7 +4,6 @@
 import Grid from '@mui/material/Unstable_Grid2';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Pagination from '@mui/material/Pagination';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'src/routes/hooks';
 import { Iconify } from 'src/components/iconify';
@@ -47,8 +46,6 @@ export function CountryView() {
           </Grid>
         ))}
       </Grid>
-
-      <Pagination count={10} color="primary" sx={{ mt: 8, mx: 'auto' }} />
     </DashboardContent>
   );
 }
